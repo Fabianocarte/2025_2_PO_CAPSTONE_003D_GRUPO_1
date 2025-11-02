@@ -1,0 +1,52 @@
+# Dependencies
+node_modules/          # Carpeta de módulos de Node.js (muy pesada, no se debe subir)
+package-lock.json
+yarn.lock
+**/node_modules/
+
+# Environment
+.env                # Archivos con variables de entorno y configuraciones sensibles
+.env.*
+credentials.json
+
+# Build
+/build/             # Carpeta donde se guarda el código compilado
+/dist/              # Carpeta de distribución
+.next/
+out/
+
+# IDE
+.idea/            # Archivos de configuración de IntelliJ IDEA
+.vscode/          # Archivos de configuración de Visual Studio Code
+*.sublime-workspace       # Archivos de configuración de Sublime Text
+.vscode/settings.json
+*.swp
+*.swo
+
+# Logs y temporales
+*.log
+*.tmp
+debug.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Sistema operativo
+.DS_Store         # Archivos de metadata de macOS
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Uploads (if contains sensitive data)
+uploads/*.jpg
+uploads/*.png
+uploads/*.pdf
+!uploads/.gitkeep
