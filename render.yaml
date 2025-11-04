@@ -12,7 +12,7 @@ services:
     env: node
     region: oregon  # O 'singapore' si estás en Asia
     plan: free
-    branch: feature/pepsicoapp
+    branch: main
     rootDir: backend
     buildCommand: npm install
     startCommand: npm start
@@ -95,11 +95,9 @@ services:
     # Health check para keep-alive
     healthCheckPath: /health
     
-    # Disk para uploads (opcional, limitado en free)
-    disk:
-      name: uploads
-      mountPath: /opt/render/project/src/backend/uploads
-      sizeGB: 1  # Gratis hasta 1GB
+    # NOTA: Disk no disponible en plan free
+    # Los archivos uploads se perderán al reiniciar el servicio
+    # Para producción real, usa Cloudinary o AWS S3
 
 # ============================================
 # NOTAS IMPORTANTES
