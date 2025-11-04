@@ -1,0 +1,319 @@
+/* Calendario Semanal - Siguiendo el diseño existente del proyecto */
+
+.calendario-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 20px 0;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.calendario-header h1 {
+    margin: 0;
+    color: var(--color-primario, #2c3e50);
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.navegacion-semana {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.semana-actual {
+    font-size: 16px;
+    font-weight: bold;
+    min-width: 200px;
+    text-align: center;
+    color: var(--color-primario, #2c3e50);
+}
+
+.calendario-semanal {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.dia-columna {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    min-height: 500px;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease;
+}
+
+.dia-columna:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.dia-header {
+    background: var(--color-primario, #2c3e50);
+    color: white;
+    padding: 15px;
+    border-radius: 8px 8px 0 0;
+    text-align: center;
+}
+
+.dia-header h3 {
+    margin: 0 0 5px 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.dia-header .fecha {
+    font-size: 14px;
+    opacity: 0.9;
+    display: block;
+}
+
+.dia-header .contador-citas {
+    font-size: 12px;
+    background: rgba(255,255,255,0.2);
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-top: 8px;
+    display: inline-block;
+}
+
+.citas-dia {
+    padding: 10px;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.sin-citas {
+    text-align: center;
+    color: #999;
+    padding: 40px 20px;
+}
+
+.sin-citas span {
+    font-size: 32px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.sin-citas p {
+    margin: 0;
+    font-style: italic;
+}
+
+.cita-item {
+    background: #f8f9fa;
+    border-radius: 6px;
+    padding: 10px;
+    margin-bottom: 8px;
+    border-left: 4px solid #ddd;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.cita-item:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.cita-item.estado-programada {
+    background: #e3f2fd;
+    border-left-color: #2196f3;
+}
+
+.cita-item.estado-en_proceso {
+    background: #fff3e0;
+    border-left-color: #ff9800;
+}
+
+.cita-item.estado-completada {
+    background: #e8f5e8;
+    border-left-color: #4caf50;
+    opacity: 0.8;
+}
+
+.cita-item.estado-cancelada {
+    background: #ffebee;
+    border-left-color: #f44336;
+    opacity: 0.7;
+}
+
+.cita-tiempo {
+    font-weight: bold;
+    color: var(--color-primario, #2c3e50);
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.cita-tiempo .duracion {
+    font-size: 11px;
+    color: #666;
+    font-weight: normal;
+}
+
+.cita-vehiculo, .cita-mecanico {
+    font-size: 12px;
+    margin-bottom: 3px;
+    color: #555;
+}
+
+.cita-descripcion {
+    font-size: 11px;
+    color: #777;
+    margin-bottom: 8px;
+    line-height: 1.3;
+}
+
+.cita-acciones {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.btn-mini {
+    padding: 3px 8px;
+    font-size: 11px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.btn-mini.btn-primary {
+    background: var(--color-primario, #007bff);
+    color: white;
+}
+
+.btn-mini.btn-primary:hover {
+    background: var(--color-primario-oscuro, #0056b3);
+}
+
+.btn-mini.btn-success {
+    background: var(--color-exito, #28a745);
+    color: white;
+}
+
+.btn-mini.btn-success:hover {
+    background: #218838;
+}
+
+.estado-badge {
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+.estado-badge.programada {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.estado-badge.en-proceso {
+    background: #fff3e0;
+    color: #f57c00;
+}
+
+.estado-badge.completada {
+    background: #e8f5e8;
+    color: #388e3c;
+}
+
+/* Badges de prioridad */
+.badge {
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 8px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.badge-urgente {
+    background: #ffebee;
+    color: #c62828;
+}
+
+.badge-alta {
+    background: #fff3e0;
+    color: #e65100;
+}
+
+.badge-media {
+    background: #e3f2fd;
+    color: #1565c0;
+}
+
+.badge-baja {
+    background: #f3e5f5;
+    color: #6a1b9a;
+}
+
+/* Spinner */
+.spinner {
+    text-align: center;
+    padding: 50px;
+    font-size: 18px;
+    color: #666;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .calendario-semanal {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .calendario-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .calendario-semanal {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .dia-columna {
+        min-height: 300px;
+    }
+    
+    .navegacion-semana {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .semana-actual {
+        min-width: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .calendario-semanal {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .container {
+        padding: 10px;
+    }
+    
+    .calendario-header h1 {
+        font-size: 22px;
+    }
+    
+    .dia-header {
+        padding: 10px;
+    }
+    
+    .citas-dia {
+        padding: 8px;
+    }
+}

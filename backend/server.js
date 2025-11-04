@@ -22,6 +22,7 @@ const webhookRoutes = require('./src/routes/webhook.routes');
 const usuariosRoutes = require('./src/routes/usuarios.routes');
 const notificationsRoutes = require('./src/routes/notifications.routes');
 const dashboardRoutes = require('./src/routes/dashboard.routes');
+const citasRoutes = require('./src/routes/citas.routes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -102,7 +103,8 @@ app.get('/', (req, res) => {
             webhook: '/api/webhook',
             usuarios: '/api/usuarios',
             notifications: '/api/notifications',
-            dashboard: '/api/dashboard'
+            dashboard: '/api/dashboard',
+            citas: '/api/citas'
         }
     });
 });
@@ -121,6 +123,7 @@ app.use('/api/webhook', webhookRoutes);
 app.use('/api/usuarios', usuariosRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/notifications', notificationsRoutes);
+app.use('/api/citas', citasRoutes);
 
 // ============================================
 // MANEJO DE ERRORES

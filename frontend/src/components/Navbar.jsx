@@ -33,6 +33,7 @@ function Navbar() {
           <>
             <Link to="/">Dashboard</Link>
             <Link to="/ordenes">Órdenes</Link>
+            <Link to="/calendario">📅 Mi Agendamiento</Link>
           </>
         );
       case 'conductor':
@@ -52,6 +53,7 @@ function Navbar() {
             <Link to="/solicitudes">Solicitudes</Link>
             <Link to="/ordenes">Órdenes</Link>
             <Link to="/vehiculos">Vehículos</Link>
+            <Link to="/calendario">📅 Agendamiento</Link>
             <Link to="/usuarios">Usuarios</Link>
           </>
         );

@@ -1,5 +1,6 @@
 const { Solicitud, Usuario, Vehiculo, OrdenTrabajo, Conversacion } = require('../models');
 const { Op } = require('sequelize');
+const AgendamientoSimple = require('../services/agendamientoSimple');
 
 /**
  * Listar todas las solicitudes (con filtros)
@@ -187,10 +188,25 @@ const aprobarSolicitud = async (req, res) => {
         await solicitud.save();
 
         // ============================================
+        // 🆕 CREAR CITA AUTOMÁTICAMENTE
+        // ============================================
+        let citaCreada = null;
+        try {
+            citaCreada = await AgendamientoSimple.crearCitaAutomatica(solicitud.id, solicitud);
+            if (citaCreada) {
+                console.log(`📅 Cita automática creada: ${citaCreada.fecha_cita} ${citaCreada.hora_cita}`);
+            }
+        } catch (errorCita) {
+            console.warn('⚠️ No se pudo crear cita automática:', errorCita.message);
+            // No fallar la aprobación por esto
+        }
+
+        // ============================================
         // CREAR ORDEN DE TRABAJO AUTOMÁTICAMENTE
         // ============================================
         const nuevaOT = await OrdenTrabajo.create({
             solicitud_id: solicitud.id,
+            mecanico_id: citaCreada?.mecanico_id || null, // 🆕 Asignar mecánico de la cita
             supervisor_id: req.usuario.id, // El usuario que aprobó
             estado: 'asignada',
             observaciones: notas_supervisor || 'Orden creada automáticamente al aprobar solicitud'
@@ -201,6 +217,10 @@ const aprobarSolicitud = async (req, res) => {
         // Notificar al chofer por WhatsApp
         const { sendWhatsAppMessage } = require('../config/twilio');
         if (solicitud.telefono_origen) {
+            const mensajeCita = citaCreada ? 
+                `\n📅 *Cita Agendada:*\nFecha: ${new Date(citaCreada.fecha_cita).toLocaleDateString('es-CL')}\nHora: ${citaCreada.hora_cita}\nDuración: ${citaCreada.duracion_estimada} minutos\n` : 
+                '\n⏳ Cita por agendar (será contactado pronto)\n';
+
             const mensaje = `✅ *SOLICITUD APROBADA*\n\n` +
                 `Tu solicitud #${solicitud.id} ha sido aprobada.\n\n` +
                 `📋 *Detalles:*\n` +
@@ -209,7 +229,8 @@ const aprobarSolicitud = async (req, res) => {
                 `Prioridad: ${solicitud.prioridad.toUpperCase()}\n\n` +
                 (notas_supervisor ? `💬 *Notas del supervisor:*\n${notas_supervisor}\n\n` : '') +
                 `🔧 Se creó la Orden de Trabajo #${nuevaOT.id}\n` +
-                `Pronto será asignada a un mecánico y recibirás actualizaciones.`;
+                mensajeCita +
+                `Recibirás actualizaciones del progreso.`;
 
             try {
                 await sendWhatsAppMessage(solicitud.telefono_origen, mensaje);
@@ -245,7 +266,13 @@ const aprobarSolicitud = async (req, res) => {
         res.json({
             message: 'Solicitud aprobada y Orden de Trabajo creada exitosamente',
             solicitud,
-            orden_trabajo: nuevaOT
+            orden_trabajo: nuevaOT,
+            cita: citaCreada ? {
+                id: citaCreada.id,
+                fecha: citaCreada.fecha_cita,
+                hora: citaCreada.hora_cita,
+                mecanico: citaCreada.mecanico?.nombre
+            } : null
         });
 
     } catch (error) {

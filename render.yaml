@@ -1,0 +1,112 @@
+# ============================================
+# RENDER.COM - CONFIGURACIÓN GRATUITA
+# Deploy automático de PepsiCo Fleet Management
+# ============================================
+
+services:
+  # ============================================
+  # BACKEND - Node.js API
+  # ============================================
+  - type: web
+    name: pepsico-fleet-backend
+    env: node
+    region: oregon  # O 'singapore' si estás en Asia
+    plan: free
+    branch: feature/pepsicoapp
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    
+    # Variables de entorno (configurar en Render Dashboard)
+    envVars:
+      - key: NODE_ENV
+        value: production
+      
+      - key: PORT
+        value: 5000
+      
+      # Base de datos (actualizar con tus valores de PlanetScale)
+      - key: DB_HOST
+        sync: false  # Configurar manualmente en Dashboard
+      
+      - key: DB_PORT
+        value: 3306
+      
+      - key: DB_NAME
+        sync: false  # Configurar manualmente
+      
+      - key: DB_USER
+        sync: false  # Configurar manualmente
+      
+      - key: DB_PASSWORD
+        sync: false  # Configurar manualmente
+      
+      # JWT
+      - key: JWT_SECRET
+        generateValue: true  # Render genera automáticamente
+      
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      
+      # Twilio WhatsApp
+      - key: TWILIO_ACCOUNT_SID
+        sync: false  # Copiar de tu .env actual
+      
+      - key: TWILIO_AUTH_TOKEN
+        sync: false  # Copiar de tu .env actual
+      
+      - key: TWILIO_WHATSAPP_NUMBER
+        sync: false  # Copiar de tu .env actual
+      
+      # OpenAI
+      - key: OPENAI_API_KEY
+        sync: false  # Copiar de tu .env actual
+      
+      - key: OPENAI_MODEL
+        value: gpt-4o-mini
+      
+      - key: OPENAI_MAX_TOKENS
+        value: 1000
+      
+      # URLs (se autoconfiguran después del deploy)
+      - key: FRONTEND_URL
+        value: https://pepsico-fleet-frontend.vercel.app
+      
+      - key: WEBHOOK_BASE_URL
+        value: https://pepsico-fleet-backend.onrender.com
+      
+      # Rate Limiting
+      - key: RATE_LIMIT_WINDOW_MS
+        value: 900000
+      
+      - key: RATE_LIMIT_MAX_REQUESTS
+        value: 100
+      
+      # Archivos
+      - key: UPLOAD_DIR
+        value: ./uploads
+      
+      - key: MAX_FILE_SIZE
+        value: 5242880
+      
+      - key: ALLOWED_FILE_TYPES
+        value: image/jpeg,image/png,image/jpg,application/pdf
+
+    # Health check para keep-alive
+    healthCheckPath: /health
+    
+    # Disk para uploads (opcional, limitado en free)
+    disk:
+      name: uploads
+      mountPath: /opt/render/project/src/backend/uploads
+      sizeGB: 1  # Gratis hasta 1GB
+
+# ============================================
+# NOTAS IMPORTANTES
+# ============================================
+# 1. El frontend debes deployarlo en Vercel (gratis ilimitado)
+# 2. La base de datos MySQL usa PlanetScale (gratis 5GB)
+# 3. Este servicio se duerme después de 15 min sin uso
+# 4. Configura cron-job.org para hacer ping cada 14 min
+# 5. Todas las variables marcadas con "sync: false" 
+#    debes configurarlas manualmente en Render Dashboard

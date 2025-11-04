@@ -7,6 +7,7 @@ import Solicitudes from './pages/Solicitudes';
 import Ordenes from './pages/Ordenes';
 import Vehiculos from './pages/Vehiculos';
 import Perfil from './pages/Perfil';
+import CalendarioSemanal from './pages/CalendarioSemanal';
 import NotificationToast from './components/NotificationToast';
 import NotificationConnector from './components/NotificationConnector';
 
@@ -72,6 +73,14 @@ function App() {
             element={
               <PrivateRoute>
                 <Perfil />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path="/calendario" 
+            element={
+              <PrivateRoute>
+                <CalendarioSemanal />
               </PrivateRoute>
             } 
           />

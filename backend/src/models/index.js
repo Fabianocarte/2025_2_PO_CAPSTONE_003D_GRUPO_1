@@ -5,6 +5,7 @@ const Solicitud = require('./Solicitud');
 const OrdenTrabajo = require('./OrdenTrabajo');
 const Conversacion = require('./Conversacion');
 const HistorialMensaje = require('./HistorialMensaje');
+const CitaTaller = require('./CitaTaller');
 
 // ============================================
 // DEFINIR RELACIONES
@@ -86,11 +87,36 @@ Conversacion.hasMany(HistorialMensaje, {
     as: 'mensajes'
 });
 
+// ============================================
+// RELACIONES CITAS TALLER
+// ============================================
+
+// CitaTaller - Solicitud
+CitaTaller.belongsTo(Solicitud, {
+    foreignKey: 'solicitud_id',
+    as: 'solicitud'
+});
+Solicitud.hasOne(CitaTaller, {
+    foreignKey: 'solicitud_id',
+    as: 'cita_taller'
+});
+
+// CitaTaller - Usuario (Mecánico)
+CitaTaller.belongsTo(Usuario, {
+    foreignKey: 'mecanico_id',
+    as: 'mecanico'
+});
+Usuario.hasMany(CitaTaller, {
+    foreignKey: 'mecanico_id',
+    as: 'citas_taller'
+});
+
 module.exports = {
     Usuario,
     Vehiculo,
     Solicitud,
     OrdenTrabajo,
     Conversacion,
-    HistorialMensaje
+    HistorialMensaje,
+    CitaTaller
 };
